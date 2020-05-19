@@ -16,35 +16,14 @@ function Search() {
 
     //setState({...state, searchTerm: event.target.value})
 
-
-    // // Load all books and store them with setBooks
-    // useEffect(() => {
-    //     loadBooks()
-    // }, [])
-
-    // // Loads all books and sets them to books
-    // function loadBooks() {
-    //     API.getBooks()
-    //         .then(res =>
-    //             setBooks(res.data)
-    //         )
-    //         .catch(err => console.log(err));
-    // };
-
-    // // Deletes a book from the database with a given id, then reloads books from the db
-    // function deleteBook(id) {
-    //     API.deleteBook(id)
-    //         .then(res => loadBooks())
-    //         .catch(err => console.log(err));
-    // }
-
     // Handles updating component state when the user types into the input field
-    function handleInputChange(event) {
-        const name = event.target.value;
-        const value = event.target.value;
-        setState({ name: value })
-        //setFormObject({ ...formObject, [name]: value })
+    handleInputChange = event => {
+        const { name, value } = event.target;
+        this.setState({
+            [name]: value
+        });
     };
+
 
     // When the form is submitted, use the API.saveBook method to save the book data
     // Then reload books from the database
