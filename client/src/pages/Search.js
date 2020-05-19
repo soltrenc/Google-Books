@@ -5,6 +5,7 @@ import API from "../utils/API";
 import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { Input, TextArea, FormBtn } from "../components/Form";
+import { query } from "express";
 
 function Search() {
     // Setting our component's initial state
@@ -39,8 +40,9 @@ function Search() {
 
     // Handles updating component state when the user types into the input field
     function handleInputChange(event) {
-        const { name, value } = event.target;
-
+        const name = event.target.value;
+        const value = event.target.value;
+        setState({ name: value })
         //setFormObject({ ...formObject, [name]: value })
     };
 
@@ -49,17 +51,19 @@ function Search() {
     function handleFormSubmit(event) {
         console.log("we got clicked")
         event.preventDefault();
-        API.search("").then(function (data) {
+        API.search("Harry Potter").then(function (data) {
             console.log(data)
-
             var cleanedBooks = []
             // for loop
             //in for loop each time make a new obj with just anme title ect...
             //.push new obj into your empty array above for loop!!
             for (let i = 0; i < data.data.items.length; i++) {
                 var cleanBook = {
-                    title: data.data.items[i].volumeInfo.title
-
+                    title: data.data.items[i].volumeInfo.title,
+                    author: data.data.items[i].volumeInfo.author,
+                    description: data.data.items[i].volumeInfo.description,
+                    image: data.data.items[i].volumeInfo.imageLinks.thumbnail,
+                    link: data.data.items[i].volumeInfo.peviewLink
                 }
                 cleanedBooks.push(cleanBook)
             }
@@ -98,13 +102,10 @@ function Search() {
                             <Col size="md-12">
                                 <div style={{ border: "solid 3px red", borderRadius: "5px" }}>
                                     <h1> Results </h1>
-
-                                    {/* Where the results will go*/}
                                     {state.searchedBooks.map((singleBook) => {
                                         return (
                                             <div>
                                                 <h1> {singleBook.title}</h1>
-
                                             </div>
                                         )
                                     })}
