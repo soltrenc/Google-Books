@@ -40,6 +40,7 @@ function Search() {
     // Handles updating component state when the user types into the input field
     function handleInputChange(event) {
         const { name, value } = event.target;
+
         //setFormObject({ ...formObject, [name]: value })
     };
 
@@ -48,7 +49,7 @@ function Search() {
     function handleFormSubmit(event) {
         console.log("we got clicked")
         event.preventDefault();
-        API.search("Harry Potter").then(function (data) {
+        API.search("").then(function (data) {
             console.log(data)
 
             var cleanedBooks = []
@@ -58,6 +59,7 @@ function Search() {
             for (let i = 0; i < data.data.items.length; i++) {
                 var cleanBook = {
                     title: data.data.items[i].volumeInfo.title
+
                 }
                 cleanedBooks.push(cleanBook)
             }
@@ -80,7 +82,7 @@ function Search() {
                     </Jumbotron>
                     <form>
                         <div style={{ border: "solid 3px red", borderRadius: "5px" }}>
-                            <p> Book Search </p>
+                            <h1> Book Search </h1>
                             <Input
                                 onChange={handleInputChange}
                                 name="title"
@@ -91,22 +93,23 @@ function Search() {
                             >
                                 Submit Book Search
               </FormBtn>
-                            <br />
                         </div>
                         <Row>
-                            <div style={{ border: "solid 3px red", borderRadius: "5px" }}>
-                                <p> Results </p>
+                            <Col size="md-12">
+                                <div style={{ border: "solid 3px red", borderRadius: "5px" }}>
+                                    <h1> Results </h1>
 
-                                {/* Where the results will go*/}
-                                {state.searchedBooks.map((singleBook) => {
-                                    return (
-                                        <div>
-                                            <h1> {singleBook.title}</h1>
+                                    {/* Where the results will go*/}
+                                    {state.searchedBooks.map((singleBook) => {
+                                        return (
+                                            <div>
+                                                <h1> {singleBook.title}</h1>
 
-                                        </div>
-                                    )
-                                })}
-                            </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </Col>
                         </Row>
                     </form>
                 </Col>
