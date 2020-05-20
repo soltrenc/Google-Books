@@ -1,103 +1,87 @@
-import React, { useState, useEffect } from "react";
-import DeleteBtn from "../components/DeleteBtn";
-import Jumbotron from "../components/Jumbotron";
+import React, { Component } from "react";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
-import { Col, Row, Container } from "../components/Grid";
-import { Input, TextArea, FormBtn } from "../components/Form";
-import { query } from "express";
+import { Container, Row, Col } from "../components/Grid";
+import { BookList, BookListItem } from "../components/BookList";
+import { Input, SearchButton } from "../components/Input";
 
-function Search() {
-    // Setting our component's initial state
-    const [state, setState] = useState({
-        searchTerm: '',
-        searchedBooks: []
-    })
+class Search extends Component {
 
-    //setState({...state, searchTerm: event.target.value})
+    state = {
+        books: [],
+        bookSearch: ""
+    };
 
-    // Handles updating component state when the user types into the input field
     handleInputChange = event => {
         const { name, value } = event.target;
-        this.setState({
-            [name]: value
-        });
+        this.setState({ [name]: value })
     };
 
-
-    // When the form is submitted, use the API.saveBook method to save the book data
-    // Then reload books from the database
-    function handleFormSubmit(event) {
-        console.log("we got clicked")
+    handleFormSubmit = event => {
         event.preventDefault();
-        API.search("Harry Potter").then(function (data) {
-            console.log(data)
-            var cleanedBooks = []
-            // for loop
-            //in for loop each time make a new obj with just anme title ect...
-            //.push new obj into your empty array above for loop!!
-            for (let i = 0; i < data.data.items.length; i++) {
-                var cleanBook = {
-                    title: data.data.items[i].volumeInfo.title,
-                    author: data.data.items[i].volumeInfo.author,
-                    description: data.data.items[i].volumeInfo.description,
-                    image: data.data.items[i].volumeInfo.imageLinks.thumbnail,
-                    link: data.data.items[i].volumeInfo.peviewLink
-                }
-                cleanedBooks.push(cleanBook)
-            }
-
-            //last step update staet with new cleand books array!
-            setState({ ...state, searchedBooks: cleanedBooks })
-
-
-        })
+        API.searchBooks(this.state.bookSearch)
+            .then(res => {
+                this.setState({ books: res.data.items }, function () {
+                    console.log(this.state.books);
+                })
+            })
+            .catch(err => console.log(err))
     };
 
-    console.log('this is our state', state)
-    return (
-        <Container fluid>
-            <Row>
-                <Col size="md-12">
-                    <Jumbotron>
-                        <h1> (React) Google Books Search</h1>
-                        <h1> Search for and Save Books of Interest</h1>
-                    </Jumbotron>
-                    <form>
-                        <div style={{ border: "solid 3px red", borderRadius: "5px" }}>
-                            <h1> Book Search </h1>
-                            <Input
-                                onChange={handleInputChange}
-                                name="title"
-                                placeholder="Search for books"
-                            />
-                            <FormBtn
-                                onClick={handleFormSubmit}
-                            >
-                                Submit Book Search
-              </FormBtn>
-                        </div>
-                        <Row>
-                            <Col size="md-12">
-                                <div style={{ border: "solid 3px red", borderRadius: "5px" }}>
-                                    <h1> Results </h1>
-                                    {state.searchedBooks.map((singleBook) => {
-                                        return (
-                                            <div>
-                                                <h1> {singleBook.title}</h1>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </Col>
-                        </Row>
-                    </form>
-                </Col>
-            </Row>
-        </Container>
-    );
-}
+    render() {
+        return (
+            <div>
+                <Container>
+                    <Row>
+                        <Col size="md-12">
+                            <form>
+                                <Container>
+                                    <Row>
+                                        <Col size="xs-12 sm-12">
+                                            <Input
+                                                name="bookSearch"
+                                                value={this.state.bookSearch}
+                                                onChange={this.handleInputChange}
+                                                placeholder="Search for a Book"
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col size="xs-12 sm-12">
+                                            <SearchButton
+                                                onClick={this.handleFormSubmit}
+                                                type="success"
+                                                className="input-lg"
+                                            >
+                                                Search
+                                            </SearchButton>
+                                        </Col>
+                                    </Row>
+                                </Container>
+                            </form>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col size="xs-12">
+                            <BookList>
+                                {this.state.books.map(book => {
+                                    return (
+                                        <BookListItem
+                                            key={book.id}
+                                            title={book.volumeInfo.title}
+                                            authors={book.volumeInfo.authors}
+                                            link={book.volumeInfo.infoLink}
+                                            description={book.volumeInfo.description}
+                                            image={book.volumeInfo.imageLinks.thumbnail}
+                                        />);
+                                })}
+                            </BookList>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        );
+    };
 
+};
 
 export default Search;
-
