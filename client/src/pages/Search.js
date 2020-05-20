@@ -32,36 +32,34 @@ class Search extends Component {
             <div>
                 <Container>
                     <Row>
-                        <Col size="md-12">
+                        <Col size="lg-12">
                             <form>
-                                <Container>
-                                    <Row>
-                                        <Col size="xs-12 sm-12">
-                                            <Input
-                                                name="bookSearch"
-                                                value={this.state.bookSearch}
-                                                onChange={this.handleInputChange}
-                                                placeholder="Search for a Book"
-                                            />
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col size="xs-12 sm-12">
-                                            <SearchButton
-                                                onClick={this.handleFormSubmit}
-                                                type="success"
-                                                className="input-lg"
-                                            >
-                                                Search
+                                <Row>
+                                    <Col size="lg-12">
+                                        <Input
+                                            name="bookSearch"
+                                            value={this.state.bookSearch}
+                                            onChange={this.handleInputChange}
+                                            placeholder="Search for a Book"
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col size="lg-12">
+                                        <SearchButton
+                                            onClick={this.handleFormSubmit}
+                                            type="success"
+                                            className="input-lg"
+                                        >
+                                            Search
                                             </SearchButton>
-                                        </Col>
-                                    </Row>
-                                </Container>
+                                    </Col>
+                                </Row>
                             </form>
                         </Col>
                     </Row>
                     <Row>
-                        <Col size="xs-12">
+                        <Col size="lg-12">
                             <BookList>
                                 {this.state.books.map(book => {
                                     return (
